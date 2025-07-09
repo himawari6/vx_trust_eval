@@ -1,0 +1,66 @@
+class Connection:
+    """
+    单次连接对象，存储用户-终端-虚拟机间的一次具体连接信息
+    """
+    def __init__(self, connectStart, connectEnd, onlineTime, user_id, terminal_id, vm_id, traceId=None):
+        self.connectStart = connectStart
+        self.connectEnd = connectEnd
+        self.onlineTime = onlineTime  # 持续时长（秒）
+        self.user_id = user_id
+        self.terminal_id = terminal_id
+        self.vm_id = vm_id
+        self.traceId = traceId  # 可选，追踪用
+
+class Graph:
+    """
+    信任传播图，N×M结构的连接矩阵
+    """
+    def __init__(self):
+        self.users = {}      # user_id -> ProcessedUser
+        self.terminals = {}  # terminal_id -> ProcessedTerminal
+        self.vms = {}        # vm_id -> ProcessedVM
+
+        # 每个用户的连接矩阵：user_id -> { terminal_id: { vm_id: 累计在线时长 } }
+        self.connection_time = {}
+
+    def add_user(self, user):
+        self.users[user.user_id] = user
+        if user.user_id not in self.connection_time:
+            self.connection_time[user.user_id] = {}
+
+    def add_terminal(self, terminal):
+        self.terminals[terminal.terminal_id] = terminal
+
+    def add_vm(self, vm):
+        self.vms[vm.vm_id] = vm
+
+    def add_connection(self, user_id, terminal_id, vm_id, online_time):
+        """
+        累计连接时长
+        """
+        if user_id not in self.connection_time:
+            self.connection_time[user_id] = {}
+        if terminal_id not in self.connection_time[user_id]:
+            self.connection_time[user_id][terminal_id] = {}
+        self.connection_time[user_id][terminal_id][vm_id] = (
+            self.connection_time[user_id][terminal_id].get(vm_id, 0) + online_time
+        )
+
+    def get_terminal_vms_time(self, user_id, terminal_id):
+        """
+        获取某用户下，指定终端与各虚拟机的累计连接时间
+        """
+        # 返回字典，键为虚拟机号m，值为w(k,m)，维数1*M，共M个键值对
+        return self.connection_time.get(user_id, {}).get(terminal_id, {})
+
+    def get_user_terminals_time(self, user_id):
+        """
+        获取某用户下，各终端的总连接时间
+        """
+        terminals = self.connection_time.get(user_id, {})
+        terminal_total_time = {
+            terminal_id: sum(vm_times.values())
+            for terminal_id, vm_times in terminals.items()
+        }
+        # 返回字典，键为终端号k，值为C(k)，维数1*N，共N个键值对
+        return terminal_total_time
