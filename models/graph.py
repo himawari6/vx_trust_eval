@@ -50,7 +50,7 @@ class Graph:
         """
         获取某用户下，指定终端与各虚拟机的累计连接时间
         """
-        # 返回字典，键为虚拟机号m，值为w(k,m)，维数1*M，共M个键值对
+        # 返回字典，键为虚拟机号m，值为k号终端连接m号虚拟机的时间w(k,m)，维数1*M，M为虚拟机数量，共M个键值对
         return self.connection_time.get(user_id, {}).get(terminal_id, {})
 
     def get_user_terminals_time(self, user_id):
@@ -62,5 +62,5 @@ class Graph:
             terminal_id: sum(vm_times.values())
             for terminal_id, vm_times in terminals.items()
         }
-        # 返回字典，键为终端号k，值为C(k)，维数1*N，共N个键值对
+        # 返回字典，键为终端号k，值为k号终端连接虚拟机的总时间C(k)，维数1*N，N为终端数量，共N个键值对
         return terminal_total_time

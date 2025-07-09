@@ -88,14 +88,16 @@ def trust_propagation(graph: Graph):
     results = {}
 
     for user_id, user in graph.users.items():
-        # 返回字典，键为终端号k，值为C(k)，维数1*N，共N个键值对
+        # 返回字典，键为终端号k，值为k号终端连接虚拟机的总时间C(k)，维数1*N，N为终端数量，共N个键值对
+        # 若未访问任何终端、虚拟机，返回一个空字典{}
         terminal_time_map = graph.get_user_terminals_time(user_id)
-        # log求和得到该用户连接终端的总时间
-        total_user_time = sum(np.log(1 + terminal_time_map.values()))
 
-        if total_user_time < EPS:
+        if not terminal_time_map:
             results[user_id] = user.trust_score
             continue  # 无连接，基础信任值即为总信任值
+
+        # log求和得到该用户连接终端的总时间
+        total_user_time = sum(np.log(1 + terminal_time_map.values()))
 
         terminal_trust_sum = 0
         
