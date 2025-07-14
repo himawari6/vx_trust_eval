@@ -5,6 +5,33 @@ from models.vm import RawVM, ProcessedVM
 from utils import sigmoid
 from config import EPS, TAU
 
+def aggregate_alerts(connections, raw_terminals, raw_vms):
+    """
+    聚合连接中的告警数，直接更新 RawTerminal 和 RawVM 实例的告警字段
+
+    :param connections: List[Connection]
+    :param raw_terminals: List[RawTerminal]
+    :param raw_vms: List[RawVM]
+    """
+    terminal_alert_map = {}
+    vm_alert_map = {}
+
+    for conn in connections:
+        tid = conn.terminal_id
+        vid = conn.vm_id
+        alert = getattr(conn, "alertCount", 0)
+
+        terminal_alert_map[tid] = terminal_alert_map.get(tid, 0) + alert
+        vm_alert_map[vid] = vm_alert_map.get(vid, 0) + alert
+
+    # 写入 RawTerminal
+    for t in raw_terminals:
+        t.terminalAlert = terminal_alert_map.get(t.terminal_id, 0)
+
+    # 写入 RawVM
+    for v in raw_vms:
+        v.VMAlert = vm_alert_map.get(v.vm_id, 0)
+
 def preprocess_user(raw_user: RawUser):
     """用户节点特征预处理"""
     # 去除空值，置为默认

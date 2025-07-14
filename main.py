@@ -1,5 +1,5 @@
 from data_retriever import get_all_data, get_user_data
-from preprocess import preprocess_user, preprocess_terminal, preprocess_vm
+from preprocess import aggregate_alerts, preprocess_user, preprocess_terminal, preprocess_vm
 from trust_algorithm import build_graph, trust_propagation
 
 from models.user import RawUser
@@ -16,6 +16,8 @@ def evaluate_all_users():
     raw_users, raw_terminals, raw_vms, connections = get_all_data()
 
     # 特征预处理
+    aggregate_alerts(connections, raw_terminals, raw_vms)
+
     users = [preprocess_user(u) for u in raw_users]
     terminals = [preprocess_terminal(t) for t in raw_terminals]
     vms = [preprocess_vm(vm) for vm in raw_vms]
@@ -39,6 +41,7 @@ def evaluate_specific_user(user_id, terminal_ids, vm_ids):
     if not raw_users:
         raise ValueError(f"用户 {user_id} 不存在")
 
+    aggregate_alerts(connections, raw_terminals, raw_vms)
     users = [preprocess_user(u) for u in raw_users]
     terminals = [preprocess_terminal(t) for t in raw_terminals]
     vms = [preprocess_vm(vm) for vm in raw_vms]

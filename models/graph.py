@@ -2,14 +2,15 @@ class Connection:
     """
     单次连接对象，存储用户-终端-虚拟机间的一次具体连接信息
     """
-    def __init__(self, connectStart, connectEnd, onlineTime, user_id, terminal_id, vm_id, traceId=None):
+    def __init__(self, connectionId, connectStart, connectEnd, onlineTime, user_id, terminal_id, vm_id, alertNum):
+        self.connectionId = connectionId
         self.connectStart = connectStart
         self.connectEnd = connectEnd
         self.onlineTime = onlineTime  # 持续时长（秒）
         self.user_id = user_id
         self.terminal_id = terminal_id
         self.vm_id = vm_id
-        self.traceId = traceId  # 可选，追踪用
+        self.alertNum = alertNum
 
 class Graph:
     """
