@@ -4,7 +4,7 @@ from models.user import ProcessedUser
 from models.terminal import ProcessedTerminal
 from models.vm import ProcessedVM
 import numpy as np
-from utils import sigmoid
+from utils import sigmoid, generate_action
 
 
 # ---------------- 第一部分：节点初始信任值计算 ----------------
@@ -84,8 +84,6 @@ def trust_propagation(graph: Graph):
     """
     执行图结构的信任值汇聚，更新终端与用户信任值
     """
-    # 定义字典，键为用户id，值为该用户信任值
-    results = {}
 
     for user_id, user in graph.users.items():
         # 返回字典，键为终端号k，值为k号终端连接虚拟机的总时间C(k)，维数1*N，N为终端数量，共N个键值对
@@ -93,7 +91,6 @@ def trust_propagation(graph: Graph):
         terminal_time_map = graph.get_user_terminals_time(user_id)
 
         if not terminal_time_map:
-            results[user_id] = user.trust_score
             continue  # 无连接，基础信任值即为总信任值
 
         # log求和得到该用户连接终端的总时间
@@ -128,11 +125,23 @@ def trust_propagation(graph: Graph):
             terminal_trust_sum += terminal_effective_score * (np.log(1 + term_time) / total_user_time)
 
         # 混合自身分数和终端求和结果，得到该用户的Tuser
-        results[user_id] = (
-            0.4 * user.trust_score + 
-            0.4 * terminal_trust_sum + 
+        user.trust_score = (
+            0.5 * user.trust_score + 
+            0.5 * terminal_trust_sum - 
             0.2 * sigmoid(user.loginTimeDiff / 12)
         )
 
-    # 返回字典，键为用户id，值为用户信任值
-    return results
+    
+
+def generate_policy(processed_users):
+    """
+    生成最终结果结构：{user_id: {trust: float, action: str}}
+    """
+    result = {}
+    for user in processed_users:
+        result[user.user_id] = {
+            "trust": round(user.trust_score, 4),
+            "action": generate_action(user)
+        }
+    # 返回字典，键为用户id，值为用户信任值、采取的动作
+    return result

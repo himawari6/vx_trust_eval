@@ -1,6 +1,6 @@
 from data_retriever import get_all_data, get_specific_data
 from preprocess import aggregate_alerts, preprocess_user, preprocess_terminal, preprocess_vm
-from trust_algorithm import build_graph, trust_propagation
+from trust_algorithm import build_graph, trust_propagation, generate_policy
 
 from models.user import RawUser
 from models.terminal import RawTerminal
@@ -36,12 +36,11 @@ def evaluate_all_users():
 
     # 构建图 & 评估
     graph = build_graph(users, terminals, vms, connections)
-    print(users)
-    print(terminals)
-    print(vms)
-    final_scores = trust_propagation(graph)
+    trust_propagation(graph)
 
-    return final_scores
+    results = generate_policy(users)
+
+    return results
 
 def evaluate_specific_user(user_id, terminal_ids, vm_ids):
     """
