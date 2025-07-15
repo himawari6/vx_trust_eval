@@ -6,6 +6,9 @@ class RawTerminal:
         self.userDiff = userDiff  # 上次登录用户是否相同
         self.terminalAlert = terminalAlert  # 观测时间窗口内告警数量
 
+    def __repr__(self):
+        return (f"RawTerminal(terminal_id={self.terminal_id}, terminalType={self.terminalType}, "
+                f"userDiff={self.userDiff}, terminalAlert={self.terminalAlert})")
 
 # 第二组：预处理后特征数据结构
 class ProcessedTerminal:
@@ -17,3 +20,7 @@ class ProcessedTerminal:
         self.alert_score_terminal = alert_score_terminal  # w5权重特征
 
         self.trust_score = None  # 信任值，后续计算得到
+
+    def __repr__(self):
+        return (f"ProcessedTerminal(terminal_id={self.terminal_id}, basic_score={self.basic_score:.3f}, "
+                f"alert_score_terminal={self.alert_score_terminal:.3f}, trust_score={self.trust_score})")

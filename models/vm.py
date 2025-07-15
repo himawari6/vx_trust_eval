@@ -12,6 +12,10 @@ class RawVM:
         self.VMLoginSucceed = VMLoginSucceed  # 登录成功次数
         self.VMAlert = VMAlert  # 安全告警数量
 
+    def __repr__(self):
+        return (f"RawVM(vm_id={self.vm_id}, VMOsAllow={self.VMOsAllow}, VMOsVersionAllow={self.VMOsVersionAllow}, "
+                f"CPU={self.CPU}, mem={self.mem}, VMConnectionUser={self.VMConnectionUser}, "
+                f"VMLoginTotal={self.VMLoginTotal}, VMLoginSucceed={self.VMLoginSucceed}, VMAlert={self.VMAlert})")
 
 # 第二组：预处理后特征数据结构
 class ProcessedVM:
@@ -25,3 +29,8 @@ class ProcessedVM:
         self.alert_score_VM = alert_score_VM  # w9权重特征
 
         self.trust_score = None  # 信任值，后续计算得到
+
+    def __repr__(self):
+        return (f"ProcessedVM(vm_id={self.vm_id}, os_score={self.os_score:.3f}, "
+                f"performance_score={self.performance_score:.3f}, connection_score={self.connection_score:.3f}, "
+                f"alert_score_VM={self.alert_score_VM:.3f}, trust_score={self.trust_score})")

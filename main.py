@@ -1,4 +1,4 @@
-from data_retriever import get_all_data, get_user_data
+from data_retriever import get_all_data, get_specific_data
 from preprocess import aggregate_alerts, preprocess_user, preprocess_terminal, preprocess_vm
 from trust_algorithm import build_graph, trust_propagation
 
@@ -15,15 +15,30 @@ def evaluate_all_users():
     """
     raw_users, raw_terminals, raw_vms, connections = get_all_data()
 
+    # print(raw_users)
+    # print(raw_terminals)
+    # print(raw_vms)
+    # print(connections)
     # 特征预处理
     aggregate_alerts(connections, raw_terminals, raw_vms)
+
+    # print(raw_users)
+    # print(raw_terminals)
+    # print(raw_vms)
 
     users = [preprocess_user(u) for u in raw_users]
     terminals = [preprocess_terminal(t) for t in raw_terminals]
     vms = [preprocess_vm(vm) for vm in raw_vms]
 
+    # print(users)
+    # print(terminals)
+    # print(vms)
+
     # 构建图 & 评估
     graph = build_graph(users, terminals, vms, connections)
+    print(users)
+    print(terminals)
+    print(vms)
     final_scores = trust_propagation(graph)
 
     return final_scores
@@ -36,7 +51,7 @@ def evaluate_specific_user(user_id, terminal_ids, vm_ids):
     :param vm_ids: 虚拟机ID列表
     :return: 指定用户的最终信任值
     """
-    raw_users, raw_terminals, raw_vms, connections = get_user_data(user_id, terminal_ids, vm_ids)
+    raw_users, raw_terminals, raw_vms, connections = get_specific_data(user_id, terminal_ids, vm_ids)
 
     if not raw_users:
         raise ValueError(f"用户 {user_id} 不存在")
@@ -50,3 +65,7 @@ def evaluate_specific_user(user_id, terminal_ids, vm_ids):
     final_scores = trust_propagation(graph)
 
     return final_scores.get(user_id)
+
+
+if __name__ == '__main__':
+    print(evaluate_all_users())

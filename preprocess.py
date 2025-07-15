@@ -43,7 +43,7 @@ def preprocess_user(raw_user: RawUser):
     ifLoginTimeOK = raw_user.ifLoginTimeOK if raw_user.ifLoginTimeOK is not None else 1
     loginTimeBias = raw_user.loginTimeBias if raw_user.loginTimeBias is not None else 0
     loginTimeDiff = raw_user.loginTimeDiff if raw_user.loginTimeDiff is not None else 0
-    ifIpAllow = raw_user.ifIpAllow if raw_user.ifIpAllow is not None else 0
+    ifIpAllow = raw_user.ifIpAllow if raw_user.ifIpAllow is not None else 1
     ifAreaAllow = raw_user.ifAreaAllow if raw_user.ifAreaAllow is not None else 1
 
     # 登录次数与成功率评分
@@ -51,13 +51,14 @@ def preprocess_user(raw_user: RawUser):
     login_score = 1 - fail_rate * sigmoid(loginTotal - TAU)
 
     # 登录时间评分
-    part1 = 0.4 * (1 - (ifLoginTimeOK + 1) / 2)
-    part2 = 0.3 * (1 - sigmoid(abs(loginTimeBias)))
-    part3 = 0.3 * (1 - sigmoid(loginTimeDiff / 43200))
+    part1 = 0.4 * (ifLoginTimeOK + 1) / 2
+    part2 = 0.3 * (1 - (2 * sigmoid(abs(loginTimeBias)) - 1))
+    part3 = 0.3 * (1 - (2 * sigmoid(loginTimeDiff / (43200 * 7)) - 1))
     time_score = part1 + part2 + part3
+    print(part1, part2, part3)
 
     # 登录环境与网络地址评分
-    env_score = 2 - (1 - ifIpAllow) / 2 - (1 - ifAreaAllow) / 2
+    env_score = 1 - (1 - ifIpAllow) / 4 - (1 - ifAreaAllow) / 4
 
     return ProcessedUser(
         user_id=user_id,
@@ -78,7 +79,7 @@ def preprocess_terminal(raw_terminal: RawTerminal):
     terminalAlert = raw_terminal.terminalAlert if raw_terminal.terminalAlert is not None else 0
     
     # 基本信息评分
-    basic_score = 2 - (terminalType - 1) / 2 - (1 - userDiff) / 2
+    basic_score = 1 - (terminalType - 1) / 4 - (1 - userDiff) / 4
 
     # 安全态势评分
     alert_score_terminal = 1 - math.tanh(terminalAlert / 10)
@@ -103,10 +104,10 @@ def preprocess_vm(raw_vm: RawVM):
     VMAlert = raw_vm.VMAlert if raw_vm.VMAlert is not None else 0
 
     # 系统信息评分
-    os_score = 2 - (1 - VMOsAllow) / 2 - (1 - VMOsVersionAllow) / 2
+    os_score = 1 - (1 - VMOsAllow) / 4 - (1 - VMOsVersionAllow) / 4
 
     # 虚拟机性能评分
-    performance_score = 2 - (1 - CPU) / 2 - (1 - mem) / 2
+    performance_score = 1 - (1 - CPU) / 4 - (1 - mem) / 4
 
     # 连接次数与成功率评分
     fail_rate = (VMLoginTotal - VMLoginSucceed) / (VMLoginTotal + EPS)

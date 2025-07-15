@@ -14,6 +14,14 @@ class RawUser:
         self.ifIpAllow = ifIpAllow  # 是否允许网段登录
         self.ifAreaAllow = ifAreaAllow  # 是否允许地理位置登录
 
+    def __repr__(self):
+        return (f"RawUser(user_id={self.user_id}, userType={self.userType}, "
+                f"thresholdDelta={self.thresholdDelta}, "
+                f"loginTotal={self.loginTotal}, loginSucceed={self.loginSucceed}, "
+                f"ifLoginTimeOK={self.ifLoginTimeOK}, "
+                f"loginTimeBias={self.loginTimeBias}, loginTimeDiff={self.loginTimeDiff}, "
+                f"ifIpAllow={self.ifIpAllow}, ifAreaAllow={self.ifAreaAllow})")
+
 
 # 第二组：预处理后特征数据结构
 class ProcessedUser:
@@ -30,3 +38,9 @@ class ProcessedUser:
         self.env_score = env_score  # w3权重特征
 
         self.trust_score = None  # 信任值，后续计算得到
+
+    def __repr__(self):
+        return (f"ProcessedUser(user_id={self.user_id}, "
+                f"userType={self.userType}, login_score={self.login_score:.3f}, "
+                f"time_score={self.time_score:.3f}, env_score={self.env_score:.3f}, "
+                f"trust_score={self.trust_score})")

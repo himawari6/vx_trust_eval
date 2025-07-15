@@ -12,6 +12,13 @@ class Connection:
         self.vm_id = vm_id
         self.alertNum = alertNum
 
+    def __repr__(self):
+        return (f"Connection(id={self.connectionId}, "
+                f"start={self.connectStart}, end={self.connectEnd}, "
+                f"onlineTime={self.onlineTime}, "
+                f"user={self.user_id}, terminal={self.terminal_id}, vm={self.vm_id}, "
+                f"alertNum={self.alertNum})")
+
 class Graph:
     """
     信任传播图，N×M结构的连接矩阵

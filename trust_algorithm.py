@@ -97,7 +97,7 @@ def trust_propagation(graph: Graph):
             continue  # 无连接，基础信任值即为总信任值
 
         # log求和得到该用户连接终端的总时间
-        total_user_time = sum(np.log(1 + terminal_time_map.values()))
+        total_user_time = sum(np.log(1 + value) for value in terminal_time_map.values())
 
         terminal_trust_sum = 0
         
@@ -107,7 +107,7 @@ def trust_propagation(graph: Graph):
             # 返回字典，键为虚拟机号m，值为w(k,m)，维数1*M，共M个键值对
             vm_time_map = graph.get_terminal_vms_time(user_id, terminal_id)
             # log求和得到该用户该终端连接虚拟机的总时间
-            total_term_time = sum(np.log(1 + vm_time_map.values()))
+            total_term_time = sum(np.log(1 + value) for value in vm_time_map.values())
 
             if total_term_time < EPS:
                 terminal_effective_score = graph.terminals[terminal_id].trust_score
