@@ -61,9 +61,11 @@ def evaluate_specific_user(user_id, terminal_ids, vm_ids):
     vms = [preprocess_vm(vm) for vm in raw_vms]
 
     graph = build_graph(users, terminals, vms, connections)
-    final_scores = trust_propagation(graph)
+    trust_propagation(graph)
 
-    return final_scores.get(user_id)
+    results = generate_policy(users)
+
+    return results
 
 
 if __name__ == '__main__':

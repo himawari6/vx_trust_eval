@@ -140,7 +140,7 @@ def generate_policy(processed_users):
     result = {}
     for user in processed_users:
         result[user.user_id] = {
-            "trust": round(user.trust_score, 4),
+            "trust": user.trust_score,
             "action": generate_action(user)
         }
     # 返回字典，键为用户id，值为用户信任值、采取的动作
