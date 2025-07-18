@@ -21,13 +21,13 @@ class Connection:
     
     def to_dict(self):
         return {
+            "user_id": self.user_id,
+            "terminal_id": self.terminal_id,
+            "vm_id": self.vm_id,
             "connectionId": self.connectionId,
             "connectStart": str(self.connectStart),
             "connectEnd": str(self.connectEnd),
             "onlineTime": self.onlineTime,
-            "user_id": self.user_id,
-            "terminal_id": self.terminal_id,
-            "vm_id": self.vm_id,
             "alertNum": self.alertNum
         }
 

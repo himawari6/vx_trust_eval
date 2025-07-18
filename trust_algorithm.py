@@ -4,7 +4,7 @@ from models.user import ProcessedUser
 from models.terminal import ProcessedTerminal
 from models.vm import ProcessedVM
 import numpy as np
-from utils import sigmoid, generate_action
+from math_utils import sigmoid
 
 
 # ---------------- 第一部分：节点初始信任值计算 ----------------
@@ -130,18 +130,3 @@ def trust_propagation(graph: Graph):
             0.5 * terminal_trust_sum - 
             0.2 * sigmoid(user.loginTimeDiff / 12)
         )
-
-    
-
-def generate_policy(processed_users):
-    """
-    生成最终结果结构：{user_id: {trust: float, action: str}}
-    """
-    result = {}
-    for user in processed_users:
-        result[user.user_id] = {
-            "trust": user.trust_score,
-            "action": generate_action(user)
-        }
-    # 返回字典，键为用户id，值为用户信任值、采取的动作
-    return result

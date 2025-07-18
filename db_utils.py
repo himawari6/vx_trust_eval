@@ -169,3 +169,6 @@ def get_specific_data(user_id, terminal_ids, vm_ids):
         conn.close()
 
     return raw_users, raw_terminals, raw_vms, connections
+
+def update_trust_score(users):
+    pass

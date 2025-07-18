@@ -2,7 +2,7 @@ import math
 from models.user import RawUser, ProcessedUser
 from models.terminal import RawTerminal, ProcessedTerminal
 from models.vm import RawVM, ProcessedVM
-from utils import sigmoid
+from math_utils import sigmoid
 from config import EPS, TAU
 
 def aggregate_alerts(connections, raw_terminals, raw_vms):
