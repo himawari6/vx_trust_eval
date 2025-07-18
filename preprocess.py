@@ -44,7 +44,7 @@ def preprocess_user(raw_user: RawUser):
     ifLoginTimeOK = raw_user.ifLoginTimeOK if raw_user.ifLoginTimeOK is not None else 1
     loginTimeBias = raw_user.loginTimeBias if raw_user.loginTimeBias is not None else 0
     loginTimeDiff = raw_user.loginTimeDiff if raw_user.loginTimeDiff is not None else 0
-    ifIpAllow = raw_user.ifIpAllow if raw_user.ifIpAllow is not None else 1
+    ifIpAllow = raw_user.ifIpAllow if raw_user.ifIpAllow not in (None, -2) else 1
     ifAreaAllow = raw_user.ifAreaAllow if raw_user.ifAreaAllow is not None else 1
 
     # 登录次数与成功率评分
