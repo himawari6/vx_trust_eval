@@ -18,6 +18,18 @@ class Connection:
                 f"onlineTime={self.onlineTime}, "
                 f"user={self.user_id}, terminal={self.terminal_id}, vm={self.vm_id}, "
                 f"alertNum={self.alertNum})")
+    
+    def to_dict(self):
+        return {
+            "connectionId": self.connectionId,
+            "connectStart": str(self.connectStart),
+            "connectEnd": str(self.connectEnd),
+            "onlineTime": self.onlineTime,
+            "user_id": self.user_id,
+            "terminal_id": self.terminal_id,
+            "vm_id": self.vm_id,
+            "alertNum": self.alertNum
+        }
 
 class Graph:
     """
@@ -72,3 +84,11 @@ class Graph:
         }
         # 返回字典，键为终端号k，值为k号终端连接虚拟机的总时间C(k)，维数1*N，N为终端数量，共N个键值对
         return terminal_total_time
+
+    def to_dict(self):
+        return {
+            "users": [user_id for user_id, ProcessedUser in self.users.items()],
+            "terminals": [terminal_id for terminal_id, ProcessedTerminal in self.terminals.items()],
+            "vms": [vm_id for vm_id, ProcessedVM in self.vms.items()],
+            "connection_time": self.connection_time
+        }

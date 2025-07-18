@@ -17,6 +17,19 @@ class RawVM:
                 f"CPU={self.CPU}, mem={self.mem}, VMConnectionUser={self.VMConnectionUser}, "
                 f"VMLoginTotal={self.VMLoginTotal}, VMLoginSucceed={self.VMLoginSucceed}, VMAlert={self.VMAlert})")
 
+    def to_dict(self):
+        return {
+            "vm_id": self.vm_id,
+            "VMOsAllow": self.VMOsAllow,
+            "VMOsVersionAllow": self.VMOsVersionAllow,
+            "CPU": self.CPU,
+            "mem": self.mem,
+            "VMConnectionUser": self.VMConnectionUser,
+            "VMLoginTotal": self.VMLoginTotal,
+            "VMLoginSucceed": self.VMLoginSucceed,
+            "VMAlert": self.VMAlert
+        }
+
 # 第二组：预处理后特征数据结构
 class ProcessedVM:
     def __init__(self, vm_id, os_score, performance_score, connection_score, alert_score_VM):
@@ -34,3 +47,13 @@ class ProcessedVM:
         return (f"ProcessedVM(vm_id={self.vm_id}, os_score={self.os_score:.3f}, "
                 f"performance_score={self.performance_score:.3f}, connection_score={self.connection_score:.3f}, "
                 f"alert_score_VM={self.alert_score_VM:.3f}, trust_score={self.trust_score})")
+    
+    def to_dict(self):
+        return {
+            "vm_id": self.vm_id,
+            "os_score": self.os_score,
+            "performance_score": self.performance_score,
+            "connection_score": self.connection_score,
+            "alert_score_VM": self.alert_score_VM,
+            "trust_score": self.trust_score
+        }

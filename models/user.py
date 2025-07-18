@@ -22,6 +22,19 @@ class RawUser:
                 f"loginTimeBias={self.loginTimeBias}, loginTimeDiff={self.loginTimeDiff}, "
                 f"ifIpAllow={self.ifIpAllow}, ifAreaAllow={self.ifAreaAllow})")
 
+    def to_dict(self):
+        return {
+            "user_id": self.user_id,
+            "userType": self.userType,
+            "thresholdDelta": self.thresholdDelta,
+            "loginTotal": self.loginTotal,
+            "loginSucceed": self.loginSucceed,
+            "ifLoginTimeOK": self.ifLoginTimeOK,
+            "loginTimeBias": self.loginTimeBias,
+            "loginTimeDiff": self.loginTimeDiff,
+            "ifIpAllow": self.ifIpAllow,
+            "ifAreaAllow": self.ifAreaAllow
+        }
 
 # 第二组：预处理后特征数据结构
 class ProcessedUser:
@@ -44,3 +57,15 @@ class ProcessedUser:
                 f"userType={self.userType}, login_score={self.login_score:.3f}, "
                 f"time_score={self.time_score:.3f}, env_score={self.env_score:.3f}, "
                 f"trust_score={self.trust_score})")
+    
+    def to_dict(self):
+        return {
+            "user_id": self.user_id,
+            "userType": self.userType,
+            "thresholdDelta": self.thresholdDelta,
+            "loginTimeDiff": self.loginTimeDiff,
+            "login_score": self.login_score,
+            "time_score": self.time_score,
+            "env_score": self.env_score,
+            "trust_score": self.trust_score
+        }

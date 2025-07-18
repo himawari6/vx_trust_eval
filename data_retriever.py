@@ -71,7 +71,9 @@ def get_all_data():
         ]
 
         # 所有连接记录
-        cursor.execute("SELECT * FROM connection")
+        cursor.execute("""
+            SELECT * FROM connection
+            WHERE state = '在线' OR TIMESTAMPDIFF(MINUTE, connectionEnd, NOW()) BETWEEN 0 AND 5""")
         connections = [
             Connection(
                 row.get("connectionId"),

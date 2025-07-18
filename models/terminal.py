@@ -10,6 +10,14 @@ class RawTerminal:
         return (f"RawTerminal(terminal_id={self.terminal_id}, terminalType={self.terminalType}, "
                 f"userDiff={self.userDiff}, terminalAlert={self.terminalAlert})")
 
+    def to_dict(self):
+        return {
+            "terminal_id": self.terminal_id,
+            "terminalType": self.terminalType,
+            "userDiff": self.userDiff,
+            "terminalAlert": self.terminalAlert
+        }
+
 # 第二组：预处理后特征数据结构
 class ProcessedTerminal:
     def __init__(self, terminal_id, basic_score, alert_score_terminal):
@@ -24,3 +32,11 @@ class ProcessedTerminal:
     def __repr__(self):
         return (f"ProcessedTerminal(terminal_id={self.terminal_id}, basic_score={self.basic_score:.3f}, "
                 f"alert_score_terminal={self.alert_score_terminal:.3f}, trust_score={self.trust_score})")
+    
+    def to_dict(self):
+        return {
+            "terminal_id": self.terminal_id,
+            "basic_score": self.basic_score,
+            "alert_score_terminal": self.alert_score_terminal,
+            "trust_score": self.trust_score
+        }
