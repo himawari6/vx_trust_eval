@@ -25,10 +25,10 @@ def evaluate_all_users():
     raw_users, raw_terminals, raw_vms, connections = get_all_data()
     logger.info("原始数据", extra={"extra": {
         "type": "all",
-        "raw_users": [json.dumps(u.to_dict()) for u in raw_users],
-        "raw_terminals": [json.dumps(t.to_dict()) for t in raw_terminals],
-        "raw_vms": [json.dumps(vm.to_dict()) for vm in raw_vms],
-        "connections": [json.dumps(c.to_dict()) for c in connections]
+        "raw_users": [u.to_dict() for u in raw_users],
+        "raw_terminals": [t.to_dict() for t in raw_terminals],
+        "raw_vms": [vm.to_dict() for vm in raw_vms],
+        "connections": [c.to_dict() for c in connections]
     }})
 
     # 特征预处理
@@ -38,9 +38,9 @@ def evaluate_all_users():
     vms = [preprocess_vm(vm) for vm in raw_vms]
     logger.info("预处理后数据", extra={"extra": {
         "type": "all",
-        "users": [json.dumps(u.to_dict()) for u in users],
-        "terminals": [json.dumps(t.to_dict()) for t in terminals],
-        "vms": [json.dumps(vm.to_dict()) for vm in vms]
+        "users": [u.to_dict() for u in users],
+        "terminals": [t.to_dict() for t in terminals],
+        "vms": [vm.to_dict() for vm in vms]
     }})
 
 
@@ -80,10 +80,10 @@ def evaluate_specific_user(user_id, terminal_ids, vm_ids):
         raise ValueError(f"用户 {user_id} 不存在")
     logger.info("原始数据", extra={"extra": {
         "type": "all",
-        "raw_users": [json.dumps(u.to_dict()) for u in raw_users],
-        "raw_terminals": [json.dumps(t.to_dict()) for t in raw_terminals],
-        "raw_vms": [json.dumps(vm.to_dict()) for vm in raw_vms],
-        "connections": [json.dumps(c.to_dict()) for c in connections]
+        "raw_users": [u.to_dict() for u in raw_users],
+        "raw_terminals": [t.to_dict() for t in raw_terminals],
+        "raw_vms": [vm.to_dict() for vm in raw_vms],
+        "connections": [c.to_dict() for c in connections]
     }})
 
     aggregate_alerts(connections, raw_terminals, raw_vms)
@@ -92,9 +92,9 @@ def evaluate_specific_user(user_id, terminal_ids, vm_ids):
     vms = [preprocess_vm(vm) for vm in raw_vms]
     logger.info("预处理后数据", extra={"extra": {
         "type": "all",
-        "users": [json.dumps(u.to_dict()) for u in users],
-        "terminals": [json.dumps(t.to_dict()) for t in terminals],
-        "vms": [json.dumps(vm.to_dict()) for vm in vms]
+        "users": [u.to_dict() for u in users],
+        "terminals": [t.to_dict() for t in terminals],
+        "vms": [vm.to_dict() for vm in vms]
     }})
 
     graph = build_graph(users, terminals, vms, connections)
