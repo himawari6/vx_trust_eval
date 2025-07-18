@@ -35,6 +35,7 @@ def aggregate_alerts(connections, raw_terminals, raw_vms):
 def preprocess_user(raw_user: RawUser):
     """用户节点特征预处理"""
     # 去除空值，置为默认
+    record_id = raw_user.record_id
     user_id = raw_user.user_id
     userType = raw_user.userType if raw_user.userType is not None else 0
     thresholdDelta = raw_user.thresholdDelta if raw_user.thresholdDelta is not None else 0.8
@@ -60,6 +61,7 @@ def preprocess_user(raw_user: RawUser):
     env_score = 1 - (1 - ifIpAllow) / 4 - (1 - ifAreaAllow) / 4
 
     return ProcessedUser(
+        record_id=record_id,
         user_id=user_id,
         userType=userType,
         thresholdDelta=thresholdDelta,

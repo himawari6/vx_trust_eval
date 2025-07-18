@@ -1,8 +1,9 @@
 # 第一组：原始数据结构
 class RawUser:
-    def __init__(self, user_id, userType, thresholdDelta, loginTotal, loginSucceed,
+    def __init__(self, record_id, user_id, userType, thresholdDelta, loginTotal, loginSucceed,
                  ifLoginTimeOK, loginTimeBias, loginTimeDiff, 
                  ifIpAllow, ifAreaAllow):
+        self.record_id = record_id 
         self.user_id = user_id  # 用户唯一标识
         self.userType = userType  # 管理员：1，普通用户：0
         self.thresholdDelta = thresholdDelta  # 信任阈值调整因子
@@ -24,6 +25,7 @@ class RawUser:
 
     def to_dict(self):
         return {
+            "record_id": self.record_id,
             "user_id": self.user_id,
             "userType": self.userType,
             "thresholdDelta": self.thresholdDelta,
@@ -38,8 +40,9 @@ class RawUser:
 
 # 第二组：预处理后特征数据结构
 class ProcessedUser:
-    def __init__(self, user_id, userType, thresholdDelta, loginTimeDiff, 
+    def __init__(self, record_id, user_id, userType, thresholdDelta, loginTimeDiff, 
                  login_score, time_score, env_score):
+        self.record_id = record_id
         self.user_id = user_id
         self.userType = userType
         self.thresholdDelta = thresholdDelta
@@ -60,6 +63,7 @@ class ProcessedUser:
     
     def to_dict(self):
         return {
+            "record_id": self.record_id,
             "user_id": self.user_id,
             "userType": self.userType,
             "thresholdDelta": self.thresholdDelta,

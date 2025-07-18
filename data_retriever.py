@@ -23,6 +23,7 @@ def get_all_data():
         """)
         raw_users = [
             RawUser(
+                record_id=row["id"],
                 user_id=row["userId"], 
                 userType=row.get("userType"), 
                 thresholdDelta=row.get("threshold"), 
@@ -109,6 +110,7 @@ def get_specific_data(user_id, terminal_ids, vm_ids):
         raw_users = []
         if row:
             raw_users.append(RawUser(
+                row["id"],
                 row["userId"], row.get("userType"), row.get("threshold"), row.get("loginTotal"),
                 row.get("loginSucceed"), row.get("ifLoginTimeOK"), row.get("LoginTimeBias"),
                 row.get("LoginTimeDiff"), row.get("ifIpAllow"), row.get("ifAreaAllow")
