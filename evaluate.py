@@ -46,6 +46,12 @@ def evaluate_all_users():
 
     # 构建图 & 评估
     graph = build_graph(users, terminals, vms, connections)
+    logger.info("初始信任评分", extra={"extra": {
+        "type": "all",
+        "users": [u.to_dict() for u in users],
+        "terminals": [t.to_dict() for t in terminals],
+        "vms": [vm.to_dict() for vm in vms]
+    }})
     trust_propagation(graph)
 
     # 得到结果，输出/更新
