@@ -74,7 +74,7 @@ def get_all_data():
         # 所有连接记录
         cursor.execute("""
             SELECT * FROM connection
-            WHERE state = '在线' OR TIMESTAMPDIFF(MINUTE, connectEnd, NOW()) BETWEEN 0 AND 5""")
+            WHERE state = '在线' OR connectEnd IS NULL""")
         connections = [
             Connection(
                 row.get("connectionId"),
@@ -149,7 +149,7 @@ def get_specific_data(user_id, terminal_ids, vm_ids):
         # 连接
         cursor.execute("""
             SELECT * FROM connection
-            WHERE userId = %s AND terminalId IN ({}) AND resourceId IN ({})
+            WHERE (userId = %s AND terminalId IN ({}) AND resourceId IN ({})) AND (state = '在线' OR connectEnd IS NULL)
         """.format(
             ",".join(["%s"] * len(terminal_ids)),
             ",".join(["%s"] * len(vm_ids))

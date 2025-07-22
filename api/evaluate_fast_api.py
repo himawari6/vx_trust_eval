@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from typing import List
 import traceback
 
-from evaluate import evaluate_specific_user  # 你的信任评估主逻辑
+from evaluate import evaluate_specific_user  # 信任评估主逻辑
 
 app = FastAPI()
 

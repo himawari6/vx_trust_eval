@@ -16,7 +16,7 @@ class JSONFormatter(logging.Formatter):
 def get_logger(name="trust_eval"):
     logger = logging.getLogger(name)
     if not logger.handlers:
-        handler = logging.FileHandler('log.json', encoding='utf-8')  # 日志写入文件
+        handler = logging.FileHandler('log\\log.json', encoding='utf-8')  # 日志写入文件
         handler.setFormatter(JSONFormatter())
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)

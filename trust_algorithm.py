@@ -92,7 +92,7 @@ def trust_propagation(graph: Graph):
 
         if not terminal_time_map:
             # 计算衰减
-            user.trust_score = user.trust_score - 0.2 * sigmoid(user.loginTimeDiff / 12)
+            user.trust_score = user.trust_score - 0.2 * (2 * sigmoid(user.loginTimeDiff / 12) - 1)
             continue  # 无连接，基础信任值即为总信任值
 
         # log求和得到该用户连接终端的总时间
@@ -130,5 +130,5 @@ def trust_propagation(graph: Graph):
         user.trust_score = (
             0.5 * user.trust_score + 
             0.5 * terminal_trust_sum - 
-            0.2 * sigmoid(user.loginTimeDiff / 12)
+            0.2 * (2 * sigmoid(user.loginTimeDiff / 12) - 1)
         )

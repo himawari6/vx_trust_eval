@@ -2,7 +2,7 @@ import math
 from models.user import RawUser, ProcessedUser
 from models.terminal import RawTerminal, ProcessedTerminal
 from models.vm import RawVM, ProcessedVM
-from math_utils import sigmoid
+from math_utils import sigmoid, relu
 from config import EPS, TAU
 
 def aggregate_alerts(connections, raw_terminals, raw_vms):
@@ -41,7 +41,7 @@ def preprocess_user(raw_user: RawUser):
     thresholdDelta = raw_user.thresholdDelta if raw_user.thresholdDelta is not None else 0.8
     loginTotal = raw_user.loginTotal if raw_user.loginTotal is not None else 0
     loginSucceed = raw_user.loginSucceed if raw_user.loginSucceed is not None else 0
-    ifLoginTimeOK = raw_user.ifLoginTimeOK if raw_user.ifLoginTimeOK is not None else 1
+    ifLoginTimeOK = raw_user.ifLoginTimeOK if raw_user.ifLoginTimeOK not in(None, 0) else 1
     loginTimeBias = raw_user.loginTimeBias if raw_user.loginTimeBias is not None else 0
     loginTimeDiff = raw_user.loginTimeDiff if raw_user.loginTimeDiff is not None else 0
     ifIpAllow = raw_user.ifIpAllow if raw_user.ifIpAllow not in (None, -2) else 1
@@ -49,7 +49,7 @@ def preprocess_user(raw_user: RawUser):
 
     # 登录次数与成功率评分
     fail_rate = (loginTotal - loginSucceed) / (loginTotal + EPS)
-    login_score = 1 - fail_rate * sigmoid(loginTotal - TAU)
+    login_score = 1 - fail_rate * (2 * sigmoid(relu(loginTotal - TAU)) - 1)
 
     # 登录时间评分
     part1 = 0.4 * (ifLoginTimeOK + 1) / 2
@@ -112,7 +112,7 @@ def preprocess_vm(raw_vm: RawVM):
 
     # 连接次数与成功率评分
     fail_rate = (VMLoginTotal - VMLoginSucceed) / (VMLoginTotal + EPS)
-    connection_score = 1 - sigmoid((VMConnectionUser - 1) / 3) - fail_rate * sigmoid(VMLoginTotal - TAU)
+    connection_score = 1 - (2 * sigmoid(relu(VMConnectionUser - 1) / 3) - 1) - fail_rate * (2 * sigmoid(relu(VMLoginTotal - TAU)) - 1)
 
     # 安全态势评分
     alert_score_VM = 1 - math.tanh(VMAlert / 10)
