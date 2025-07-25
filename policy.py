@@ -40,21 +40,21 @@ def generate_policy_signal(processed_users):
     # 返回字典，键为用户id，值为用户信任值、采取的动作
     return result
 
-def push_single_policy(user_id: str, trust_score: float, action: str, vm_id: str):
+def push_single_policy(user_id: str, trust_score: float, action: str, vm_id: str, policy_id: int):
     now = datetime.now()
     payload = {
         "assessment_id": "1",  # 先固定 1
         "user_id": user_id,
         "trust_score": round(trust_score, 4),
         "policy": {
-            "policy_id": "1",                 # 也先固定 1
+            "policy_id": policy_id,
             "policy_name": "访问控制",
             "submitted_by": "信任评估模块",
             "subject": {
                 "user_id": user_id,
                 "tunnel_id": "1",
-                "mac_address": "",
-                "ip_address": ""
+                "mac_address": "default",
+                "ip_address": "default"
             },
             "resource": {
                 "vm_id": vm_id
@@ -66,7 +66,7 @@ def push_single_policy(user_id: str, trust_score: float, action: str, vm_id: str
         "timestamp": now.strftime("%Y-%m-%d %H:%M:%S")
     }
     resp = requests.post(POLICY_URL, json=payload, timeout=5)
-    return resp.status_code, resp.text
+    return resp.status_code, resp.json()
 
 
 def push_policy(graph):
@@ -76,25 +76,34 @@ def push_policy(graph):
     # graph的用户列表导出用户->策略对应关系
     user_action_map = graph.extract_user_action_map()
 
-    results = {}
+    results = []
+    policy_id = 2
     for user_id, user in graph.users.items():
+
         vm_ids = user_vm_map[user_id]
+        if not vm_ids:
+            vm_ids = {"all"}
+
         action = user_action_map[user_id]
+
         trust_score = user.trust_score
+
         current_user_result = []
         for vm_id in vm_ids:
             status, res = push_single_policy(
                 user_id=user_id,
                 trust_score=trust_score,
                 action=action,
-                vm_id=vm_id
+                vm_id=vm_id,
+                policy_id=policy_id
             )
+            policy_id = policy_id + 1
             current_user_result.append({
                 "vm_id": vm_id,
                 "status": status,
                 "response": res
             })
-        results.update({
+        results.append({
             "user_id": user_id,
             "trust_score": trust_score,
             "action": action,
