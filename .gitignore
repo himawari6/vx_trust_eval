@@ -7,4 +7,5 @@
 config.py
 
 *.json
-
+*.jsonl
+chatgpt*

@@ -52,9 +52,9 @@ def preprocess_user(raw_user: RawUser):
     login_score = 1 - fail_rate * (2 * sigmoid(relu(loginTotal - TAU)) - 1)
 
     # 登录时间评分
-    part1 = 0.4 * (ifLoginTimeOK + 1) / 2
+    part1 = 0.2 * (ifLoginTimeOK + 1) / 2
     part2 = 0.3 * (1 - (2 * sigmoid(abs(loginTimeBias)) - 1))
-    part3 = 0.3 * (1 - (2 * sigmoid(loginTimeDiff / 43200) - 1))
+    part3 = 0.5 * (1 - (2 * sigmoid(loginTimeDiff / 43200) - 1))
     time_score = part1 + part2 + part3
 
     # 登录环境与网络地址评分

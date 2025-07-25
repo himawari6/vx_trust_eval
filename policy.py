@@ -8,14 +8,14 @@ def generate_action(user):
 
     if T > threshold:
         return "允许访问"
-    elif T > threshold - 0.5:
+    elif T > threshold - 0.25:
         return "二次身份认证"
-    elif T > threshold - 0.75:
+    elif T > threshold - 0.5:
         return "限制访问"
     else:
         return "封禁用户"   
 
-def generate_policy(processed_users):
+def generate_policy_signal(processed_users):
     """
     生成最终结果结构：{user_id: {trust: float, action: str}}
     """

@@ -1,7 +1,7 @@
 from db_utils import get_all_data, get_specific_data, update_trust_score
 from preprocess import aggregate_alerts, preprocess_user, preprocess_terminal, preprocess_vm
 from trust_algorithm import build_graph, trust_propagation
-from policy import generate_policy
+from policy import generate_policy_signal
 
 from models.user import RawUser
 from models.terminal import RawTerminal
@@ -55,7 +55,7 @@ def evaluate_all_users():
     trust_propagation(graph)
 
     # 得到结果，输出/更新
-    results = generate_policy(users)
+    results = generate_policy_signal(users)
     # 输出
     logger.info("评估结果", extra={"extra": {
         "type": "all",
@@ -107,7 +107,7 @@ def evaluate_specific_user(user_id, terminal_ids, vm_ids):
     trust_propagation(graph)
 
     # 得到结果，输出/更新
-    results = generate_policy(users)
+    results = generate_policy_signal(users)
     # 输出
     logger.info("评估结果", extra={"extra": {
         "type": "all",
