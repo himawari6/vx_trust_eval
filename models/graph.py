@@ -1,3 +1,5 @@
+from policy import generate_action
+
 class Connection:
     """
     单次连接对象，存储用户-终端-虚拟机间的一次具体连接信息
@@ -92,3 +94,18 @@ class Graph:
             "vms": [vm_id for vm_id, ProcessedVM in self.vms.items()],
             "connection_time": self.connection_time
         }
+    
+    def extract_user_vm_ids_map(self) -> dict[str, set[str]]:
+        user_vm = {}
+        for user_id, term_dict in self.connection_time.items():
+            vm_ids = set()
+            for vm_dict in term_dict.values():
+                vm_ids.update(vm_dict.keys())  # 批量添加虚拟机ID
+            user_vm[user_id] = vm_ids
+        return user_vm
+    
+    def extract_user_action_map(self):
+        user_action = {}
+        for user_id, user in self.users.items():
+            user_action[user_id] = generate_action(user)
+        return user_action
